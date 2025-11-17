@@ -95,6 +95,15 @@ public class ProgressServiceImpl implements ProgressService {
         return mapToResponse(p);
     }
 
+    // ⭐ NEW METHOD
+    @Override
+    public List<ProgressResponse> getProgressByStudentId(Long studentId) {
+        return progressRepository.findByUser_Id(studentId)
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
     private ProgressResponse mapToResponse(Progress progress) {
         ProgressResponse r = new ProgressResponse();
         r.setId(progress.getId());
@@ -104,11 +113,8 @@ public class ProgressServiceImpl implements ProgressService {
         r.setSubmittedAt(progress.getSubmittedAt());
         r.setApprovedAt(progress.getApprovedAt());
         r.setAdminComment(progress.getAdminComment());
-
-        // ✅ Add student username & email
         r.setStudentUsername(progress.getUser().getUsername());
         r.setStudentEmail(progress.getUser().getEmail());
-
         return r;
     }
 }

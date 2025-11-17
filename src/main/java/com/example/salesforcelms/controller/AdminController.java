@@ -4,14 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.salesforcelms.dto.auth.RegisterRequest;
 import com.example.salesforcelms.dto.auth.module.ModuleRequest;
@@ -29,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/admin")
 @RequiredArgsConstructor
 public class AdminController {
-//private final moduleservid moduleservice
+
     private final ModuleService moduleService;
     private final ProgressService progressService;
     private final UserService userService;
@@ -44,12 +37,12 @@ public class AdminController {
     public ResponseEntity<List<User>> getAllAdmins() {
         return ResponseEntity.ok(userService.getAllAdmins());
     }
+
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/students")
     public ResponseEntity<List<User>> getAllStudents() {
-    return ResponseEntity.ok(userService.getAllStudents());
+        return ResponseEntity.ok(userService.getAllStudents());
     }
-
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/admins/{id}")
@@ -111,5 +104,12 @@ public class AdminController {
     @PostMapping("/progress/reject")
     public ResponseEntity<ProgressResponse> rejectProgress(@RequestBody ApproveRejectRequest request) {
         return ResponseEntity.ok(progressService.rejectProgress(request));
+    }
+
+    // ⭐ NEW API — Get progress of a single student by ID
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/progress/student/{studentId}")
+    public ResponseEntity<List<ProgressResponse>> getProgressByStudent(@PathVariable Long studentId) {
+        return ResponseEntity.ok(progressService.getProgressByStudentId(studentId));
     }
 }

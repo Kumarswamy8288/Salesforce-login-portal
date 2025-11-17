@@ -22,4 +22,7 @@ public interface ProgressService {
     ProgressResponse approveProgress(ApproveRejectRequest request);
 
     ProgressResponse rejectProgress(ApproveRejectRequest request);
+
+    // ⭐ NEW METHOD
+    List<ProgressResponse> getProgressByStudentId(Long studentId);
 }
